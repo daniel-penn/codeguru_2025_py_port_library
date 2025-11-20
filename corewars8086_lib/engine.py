@@ -7,20 +7,41 @@ import tempfile
 from py4j.java_gateway import JavaGateway, GatewayParameters
 
 class CoreWarsEngine:
-    def __init__(self, install_dir="build/install/corewars8086"):
+    def __init__(self, install_dir=None):
         self.process = None
         self.gateway = None
         self.competition = None
         self._managed_dir = tempfile.mkdtemp()
         
-        lib_dir = os.path.join(install_dir, "lib")
-        jars = glob.glob(os.path.join(lib_dir, "*.jar"))
+        # Determine where JARs are located
+        # 1. Check if provided explicitly
+        # 2. Check inside the package (installed mode)
+        # 3. Check in build directory (dev mode)
+        
+        jars = []
+        if install_dir:
+             lib_dir = os.path.join(install_dir, "lib")
+             jars = glob.glob(os.path.join(lib_dir, "*.jar"))
+        
         if not jars:
-            # Fallback to absolute path if relative fails
-            abs_lib_dir = os.path.abspath(lib_dir)
-            jars = glob.glob(os.path.join(abs_lib_dir, "*.jar"))
-            if not jars:
-                raise RuntimeError(f"No JARs found in {lib_dir}. Did you run 'gradle installDist'?")
+            # Check package directory (e.g. site-packages/corewars8086_lib/lib)
+            pkg_dir = os.path.dirname(__file__)
+            pkg_lib_dir = os.path.join(pkg_dir, "lib")
+            if os.path.exists(pkg_lib_dir):
+                jars = glob.glob(os.path.join(pkg_lib_dir, "*.jar"))
+        
+        if not jars:
+            # Check build directory (dev mode fallback)
+            dev_lib_dir = os.path.join("build", "install", "corewars8086", "lib")
+            if os.path.exists(dev_lib_dir):
+                 jars = glob.glob(os.path.join(dev_lib_dir, "*.jar"))
+                 # Fallback to absolute path if relative fails
+                 if not jars:
+                     abs_lib_dir = os.path.abspath(dev_lib_dir)
+                     jars = glob.glob(os.path.join(abs_lib_dir, "*.jar"))
+
+        if not jars:
+            raise RuntimeError(f"No JARs found. Provide install_dir or ensure package is installed correctly.")
         
         classpath = os.pathsep.join(jars)
         
