@@ -8,22 +8,41 @@ A Python library (`corewars8086_lib`) that interfaces with the Java engine using
 
 ### Prerequisites
 
-*   **Java Development Kit (JDK) 8+**: Required to run the engine.
+*   **Java Runtime Environment (JRE) 8+**: Required to run the engine.
 *   **Python 3.6+**: Required for the library.
-*   **Gradle**: For building the Java project (included wrapper or system install).
+*   **(For Building Only) Gradle**: If you are building the package from source.
 
 ### Installation
 
-1.  **Build the Java Distribution**:
-    The Python library relies on the compiled JARs. Build them using Gradle:
+#### From PyPI (Planned)
+
+```bash
+pip install corewars8086-lib
+```
+
+#### From Source (Wheel)
+
+To build and install the package locally:
+
+1.  **Build the Package**:
+    This will automatically run Gradle to compile the Java engine and bundle the JARs into the Python wheel.
     ```bash
-    gradle installDist
+    python setup.py bdist_wheel
     ```
 
-2.  **Install Python Dependencies**:
+2.  **Install the Wheel**:
     ```bash
-    pip install -r requirements.txt
+    pip install dist/corewars8086_lib-1.0.0-py3-none-any.whl
     ```
+
+#### Development Install
+
+If you want to edit the Python code:
+
+```bash
+pip install -e .
+```
+Note: For editable installs, you must ensure the JARs are built and present in `corewars8086_lib/lib/`. You can do this by running `gradle installDist` manually and copying the files, or running `python setup.py build_py` once.
 
 ### Usage
 
@@ -65,4 +84,3 @@ Run the included tests to verify the installation:
 ```bash
 pytest tests/
 ```
-
