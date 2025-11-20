@@ -1,6 +1,27 @@
-target/
-*.iml
-.idea/**
-survivors/
-zombies/
-*.csv
+# Java
+build/
+.gradle/
+*.class
+*.jar
+*.war
+*.ear
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.env
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini
