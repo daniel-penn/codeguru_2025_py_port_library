@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2025-11-20
+
 ### Fixed
 - Fixed Java classpath separator issue where `;` was hardcoded, causing failures on non-Windows platforms. Now using `os.pathsep` for cross-platform compatibility.
 - Fixed test pollution issue where `scores.csv` was being written to the project root during e2e tests. Tests now use a temporary file.

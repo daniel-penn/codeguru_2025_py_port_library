@@ -17,7 +17,7 @@ if os.path.exists(JAR_DIR):
 
 setuptools.setup(
     name="corewars8086-lib",
-    version="5.0.1",
+    version="1.0.0",
     author="CodeGuru",
     author_email="support@codeguru.co.il",
     description="Python wrapper for CoreWars8086 engine",
