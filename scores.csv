@@ -1,7 +1,15 @@
 Groups:
-Loser,0.0
-Survivor,10.0
+TeamA,1.25
+TeamB,1.25
+TeamC,1.25
+TeamD,1.25
 
 Warriors:
-Loser,0.0
-Survivor,10.0
+TeamA1,0.625
+TeamA2,0.625
+TeamB1,0.625
+TeamB2,0.625
+TeamC1,0.625
+TeamC2,0.625
+TeamD1,0.625
+TeamD2,0.625

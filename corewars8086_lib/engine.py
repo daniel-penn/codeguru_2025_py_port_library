@@ -22,7 +22,7 @@ class CoreWarsEngine:
             if not jars:
                 raise RuntimeError(f"No JARs found in {lib_dir}. Did you run 'gradle installDist'?")
         
-        classpath = ";".join(jars)
+        classpath = os.pathsep.join(jars)
         
         java_cmd = "java"
         # Prefer JAVA_HOME
@@ -57,7 +57,7 @@ class CoreWarsEngine:
             self.terminate_process()
             raise RuntimeError(f"Failed to connect to Py4J Gateway: {last_error}")
 
-    def load_warriors(self, warrior_dir, zombies_dir=None):
+    def load_warriors(self, warrior_dir, zombies_dir=None, results_file="scores.csv"):
         Options = self.gateway.jvm.il.co.codeguru.corewars8086.cli.Options
         OptionsClass = self.gateway.jvm.java.lang.Class.forName("il.co.codeguru.corewars8086.cli.Options")
         OptionsParser = self.gateway.jvm.com.google.devtools.common.options.OptionsParser
@@ -68,6 +68,9 @@ class CoreWarsEngine:
         args = ["--warriorsDir", os.path.abspath(warrior_dir)]
         if zombies_dir:
             args.extend(["--zombiesDir", os.path.abspath(zombies_dir)])
+        
+        if results_file:
+            args.extend(["--outputFile", os.path.abspath(results_file)])
         
         java_args = self.gateway.new_array(self.gateway.jvm.java.lang.String, len(args))
         for i, arg in enumerate(args):
