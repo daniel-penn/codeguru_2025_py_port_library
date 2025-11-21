@@ -121,7 +121,7 @@ class CoreWarsEngine:
             return 0
         return self.competition.getWarriorRepository().getNumberOfGroups()
 
-    def run_competition(self, battles=100, combination_size=4, parallel=True, threads=4):
+    def run_competition(self, battles=100, combination_size=4, parallel=True, threads=4, seed=None):
         if not self.competition:
              # Try to auto-load from managed dir if not explicitly loaded
              if os.listdir(self._managed_dir):
@@ -129,6 +129,16 @@ class CoreWarsEngine:
              else:
                  raise RuntimeError("Warriors not loaded. Call load_warriors() or add_warrior_from_bytes() first.")
              
+        # Ensure a non-deterministic seed each run unless provided explicitly
+        try:
+            if seed is None:
+                # High-entropy seed: time_ns xor PID xor temp dir hash
+                seed = (time.time_ns() ^ os.getpid() ^ hash(self._managed_dir)) & 0x7FFFFFFFFFFFFFFF
+            self.competition.setSeed(int(seed))
+        except Exception:
+            # If setting seed fails for any reason, continue with default behavior
+            pass
+
         try:
             if parallel:
                 self.competition.runCompetitionInParallel(battles, combination_size, threads)
